@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tcg_price: 1
+  ck_price: 1
+  card_id: one
+
+two:
+  tcg_price: 1
+  ck_price: 1
+  card_id: two

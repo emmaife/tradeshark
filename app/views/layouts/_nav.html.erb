@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-md navbar-light fixed-top" style="background-color: #cbd2d4;">
+	
+	<a class="navbar-brand" href="/"> <%= image_tag "tradeSharkBlueWaves2.png", class: 'img-nav' %><br>Trade<span style="color: #249bfa">Shark</span></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarDefault">
+		<ul class="navbar-nav mr-auto">
+		
+		  	<li class="nav-item <%=current_class(cards_neg_path)%>" >
+		    	<a class="nav-link" href="/cards/neg">Negative Spreads </a>
+		  	</li>
+		  	<li class="nav-item <%=current_class(cards_low_path)%>">
+		    	<a class="nav-link" href="/cards/low">Lowest Spreads</a>
+		  	</li>
+		  	<li class="nav-item <%=current_class(cards_low_standard_path)%>">
+		    	<a class="nav-link" href="/cards/low_standard">Lowest Standard Spreads</a>
+		  	</li>
+		</ul>
+		<%= form_tag url_for(:controller => 'cards', :action => 'search'), :method => 'get', class: 'form-inline my-2 my-lg-0'  do%>
+			<%= text_field_tag(:q, nil, class: 'form-control mr-sm-2', placeholder: 'Search For Card') %><br><br>
+			<button class="btn btn-outline-success btn-test my-2 my-sm-0" type="submit">Search</button>
+		<%end%> 
+	</div>
+</nav>

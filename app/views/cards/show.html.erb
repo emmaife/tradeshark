@@ -1,0 +1,32 @@
+<main role="main" class="container">
+	<div class="starter-template">
+		<h1><%=@title%></h1>
+	</div>
+	<table class="table table-striped table-bordered">
+		<tr>
+			<th scope="col">Card</th>
+			<th scope="col">TCG Mid</th>
+			<th scope="col">Card Kingdom</th>
+			<th scope="col">Spread</th>
+		</tr>
+<% 
+		@cards.each do |x| 
+			prices = Price.where(card_id: x.id)[0]
+			tcg_price = prices['tcg_price']
+			ck_price = prices['ck_price']
+			spread = prices['spread']
+			setCode = CardSet.where(id: x.card_set_id)[0]['code']
+			
+%>
+			<tr>
+				<td><%=x['name']  %> (<%=setCode%>) <%if x['is_foil'] %><span class="foil">✦</span><%end%><%= %> </td>
+				<td><%=number_to_currency(tcg_price)%></td>
+				<td><%=number_to_currency(ck_price)%></td>
+				<td><%=number_to_percentage(spread,  precision:2)%></td>
+			</tr>
+<%
+		end
+
+%>
+	</table>
+</main>

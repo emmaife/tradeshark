@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  tcg_id: 1
+  isFoil: false
+  set_id: one
+
+two:
+  name: MyString
+  tcg_id: 1
+  isFoil: false
+  set_id: two

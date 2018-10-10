@@ -1,0 +1,120 @@
+<main role="main" class="container">
+  <div class="starter-template">
+      <h1>MTG Price Spread</h1>
+    </div>
+  <div class="row">
+    <div class="col-md-6">
+        <h5>Top Low Spread Standard Cards</h5>
+      <table class="table table-striped table-bordered">
+        <tr>
+          <th>Card</th>
+          <th>TCG Mid</th>
+          <th>Card Kingdom</th>
+          <th>Spread</th>
+        </tr>
+        <% 
+
+        @bestPosSpread.each do |x| 
+          prices = Price.where(card_id: x.id)[0]
+          tcg_price = prices['tcg_price']
+          ck_price = prices['ck_price']
+          spread = prices['spread']
+          setCode = CardSet.where(id: x.card_set_id)[0]['code']
+            
+        %>
+          <tr>
+            <td><%=x['name'] %> <%if x['is_foil'] %><span class="foil">✦</span><%end%><%= ' ('+ setCode + ')' %> </td>
+            <td><%=number_to_currency(tcg_price)%></td>
+            <td><%=number_to_currency(ck_price)%></td>
+            <td><%= number_to_percentage(spread, precision: 2) %></td>
+          </tr>
+        <%
+        end
+        %>
+      </table>
+    </div>
+      <div class="col-md-6">
+        <h5>Top Negative Spread Cards</h5>
+      <table class="table table-striped table-bordered">
+        <tr>
+          <th>Card</th>
+          <th>TCG Mid</th>
+          <th>Card Kingdom</th>
+          <th>Spread</th>
+        </tr>
+        <% 
+        @negativeCards.each do |x| 
+          prices = Price.where(card_id: x.id)[0]
+          tcg_price = prices['tcg_price']
+          ck_price = prices['ck_price']
+          spread = prices['spread']
+          setCode = CardSet.where(id: x.card_set_id)[0]['code']
+            
+        %>
+          <tr>
+            <td><%=x['name'] %> <%if x['is_foil'] %><span class="foil">✦</span><%end%><%= ' ('+ setCode + ')' %> </td>
+            <td><%=number_to_currency(tcg_price)%></td>
+            <td><%=number_to_currency(ck_price)%></td>
+            <td><%= number_to_percentage(spread, precision: 2) %></td>
+          </tr>
+        <%
+        end
+        %>
+      </table>
+    </div>
+  </div>
+
+
+
+<br><br>
+  <%= form_tag url_for(:controller => 'cards', :action => 'search'), :method => 'get' do%>
+    <div class="container">  
+      <div class="row">
+            <br>
+          <div class="form-group filter-group">
+              <div class="col-sm-12 col-md-12 col-lg-12">                
+                  <i class="fa fa-search fa-2x pull-left searchicon"></i><input type="search" class="form-control" id="search" placeholder="Filter Sets...">
+              </div>
+          </div>
+      </div>      
+      <div class="row">
+        <% @card_sets.each do |set| %>
+          <div class="form-group">
+                  <div class="items-collection">
+              <div class="items col-sm-2">
+                          <div class="info-block block-info">
+                              <div data-toggle="buttons" class="btn-group">
+                                  <label class="btn btn-secondary">
+                                      <div class="itemcontent">
+                        <%=check_box_tag "set[]", set.id, nil %>
+                         <span class="fa fa-car fa-2x"></span>
+                         <i class="ss ss-<%=set.code.downcase%> ss-2x"></i> 
+                                          <h5>&nbsp;&nbsp;<%=set.code%>&nbsp;&nbsp;</h5>
+                                          <span class="hidden"><%=set.name%></span>
+                                      </div>
+                                  </label>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+        <% end %>
+      </div>
+    </div>
+    <%= submit_tag "Search" %>
+  <%end%>
+</main>
+<br>
+
+
+<script>
+$(function () {
+    $('#search').on('keyup', function () {
+        var pattern = $(this).val();
+        $('.items-collection .items').hide();
+        $('.items-collection .items').filter(function () {
+            return $(this).text().match(new RegExp(pattern, 'i'));
+        }).show();
+    });
+});
+</script>
