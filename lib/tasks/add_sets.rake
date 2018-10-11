@@ -3,6 +3,7 @@ desc 'add sets'
 task :add_sets => :environment do
     require 'net/http'
     require 'uri'
+    require 'open-uri'
     require 'date'
     require 'json'
     require 'nokogiri'
