@@ -5,6 +5,7 @@ task :add_sets => :environment do
     require 'uri'
     require 'date'
     require 'json'
+    equire 'nokogiri'
     url = "https://mtgjson.com/json/SetList.json"
     uri = URI(url)
     response = Net::HTTP.get(uri)
