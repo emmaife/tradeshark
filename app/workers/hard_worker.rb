@@ -15,7 +15,7 @@
                 url = URI("http://api.tcgplayer.com/pricing/product/" +  ERB::Util.url_encode(str))
                 http = Net::HTTP.new(url.host, url.port)
                 request = Net::HTTP::Get.new(url)
-                request['Authorization'] = "Bearer " + ENV["SECRET_API"]
+                request['Authorization'] = "Bearer " + ENV["API_KEY"]
                 response = http.request(request)
                 data = JSON.parse(response.body)
 

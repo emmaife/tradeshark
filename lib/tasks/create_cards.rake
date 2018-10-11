@@ -6,7 +6,7 @@ task :create_cards => :environment do
 	    url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
 	    http = Net::HTTP.new(url.host, url.port)
 	    request = Net::HTTP::Get.new(url)
-	    request['Authorization'] = "Bearer " + ENV["SECRET_API"]
+	    request['Authorization'] = "Bearer " + ENV["API_KEY"]
 	    response = http.request(request)
 	    data = JSON.parse(response.body)
 	    unless data['success'] == false
@@ -18,7 +18,7 @@ task :create_cards => :environment do
 	            puts url
 	            http = Net::HTTP.new(url.host, url.port)
 	            request = Net::HTTP::Get.new(url)
-	            request['Authorization'] = "Bearer " + ENV["SECRET_API"]
+	            request['Authorization'] = "Bearer " + ENV["API_KEY"]
 	            response = http.request(request)
 	            data = JSON.parse(response.body)
 	            data['results'].each do |y|
