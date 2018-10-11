@@ -1,6 +1,10 @@
 desc 'create cards'
 
 task :create_cards => :environment do
+	require 'net/http'
+    require 'uri'
+    require 'date'
+    require 'json'
 	@cardHash = Hash.new
 	CardSet.all.each do |x|
 	    url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
