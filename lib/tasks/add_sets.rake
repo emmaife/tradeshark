@@ -1,6 +1,10 @@
 desc 'add sets'
 
 task :add_sets => :environment do
+    require 'net/http'
+    require 'uri'
+    require 'date'
+    require 'json'
     url = "https://mtgjson.com/json/SetList.json"
     uri = URI(url)
     response = Net::HTTP.get(uri)
