@@ -18,7 +18,7 @@ class CardsController < ApplicationController
   def show
     if params[:id] == 'neg'
         @title = "Negative Spreads"
-        @cards = Card.joins(:price).where("spread < ?", 0).order('Prices.spread')
+        @cards = Card.joins(:price).where("spread < ?", 0).where(hidden: false).order('Prices.spread')
     elsif params[:id] == 'low'
         @title = "Low Spreads"
         @cards = Card.joins(:price).where("spread <= ?", 20).where("spread >= ?", 0).order('Prices.spread')
