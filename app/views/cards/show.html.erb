@@ -8,6 +8,9 @@
 			<th scope="col">TCG Mid</th>
 			<th scope="col">Card Kingdom</th>
 			<th scope="col">Spread</th>
+			<%if params[:id] == 'neg'%>
+				<th scope="col">Lowest Listing Price</th>
+			<%end%>
 		</tr>
 <% 
 		@cards.each do |x| 
@@ -15,6 +18,7 @@
 			tcg_price = prices['tcg_price']
 			ck_price = prices['ck_price']
 			spread = prices['spread']
+			lowestListing = prices['lowest_listing_price']
 			setCode = CardSet.where(id: x.card_set_id)[0]['code']
 			
 %>
@@ -23,6 +27,9 @@
 				<td><%=number_to_currency(tcg_price)%></td>
 				<td><%=number_to_currency(ck_price)%></td>
 				<td><%=number_to_percentage(spread,  precision:2)%></td>
+				<%if params[:id] == 'neg'%>
+					<td><%=number_to_currency(lowestListing)%></td>
+				<%end%>
 			</tr>
 <%
 		end
