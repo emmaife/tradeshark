@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181010172034) do
+ActiveRecord::Schema.define(version: 20181017200116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20181010172034) do
     t.integer  "card_set_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.boolean  "hidden"
     t.index ["card_set_id"], name: "index_cards_on_card_set_id", using: :btree
   end
 
@@ -38,10 +39,11 @@ ActiveRecord::Schema.define(version: 20181010172034) do
     t.float    "tcg_price"
     t.float    "ck_price"
     t.integer  "card_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.float    "spread"
     t.datetime "ck_updated"
+    t.float    "lowest_listing_price"
     t.index ["card_id"], name: "index_prices_on_card_id", using: :btree
   end
 

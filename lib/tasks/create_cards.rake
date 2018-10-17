@@ -35,9 +35,10 @@ task :create_cards => :environment do
 	@cardHash.delete_if{|k,v|  v['rarity'] == "T" || v['rarity'] == "L" || v['rarity'] == "U" || v['rarity'] == "C" ||  v['rarity'] == "P" ||  v['rarity'] == "S"  }
 
 
-	@cardHash.each  { |k,v|  Card.create(:tcg_id => k, :name => v['name'], :card_set_id => v['card_set_id']) }
+	#@cardHash.each  { |k,v|  Card.create(:tcg_id => k, :name => v['name'], :card_set_id => v['card_set_id']) }
 
 	@cardHash.each  do |k,v|  
+		Card.create(:tcg_id => k, :name => v['name'], :card_set_id => v['card_set_id'])
 		Card.create(:tcg_id => -k, :name => v['name'], :card_set_id => v['card_set_id'])
 	end
 end
