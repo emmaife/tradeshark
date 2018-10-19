@@ -13,6 +13,14 @@
 		<%end%>
 
 	</div>
+	<%= form_tag url_for(:controller => 'cards', :action => 'search'), :method => 'get' do %>
+		<%= hidden_field_tag 'q', params[:q] %>
+		<%= hidden_field_tag 'set[]', params[:set] %>
+		<%= check_box_tag 'foil[]', '1',params[:foil].nil? || params[:foil].include?('1'), onchange: 'this.form.submit();' %>
+		<%=label_tag 'Foils'%>&nbsp;
+		<%= check_box_tag 'foil[]', '0', params[:foil].nil? || params[:foil].include?('0'), onchange: 'this.form.submit();' %>
+		<%=label_tag 'Non-Foils'%>
+	<%end%>
 	<table class="table table-striped table-bordered">
 		<tr>
 			<th>Card</th>

@@ -16,9 +16,11 @@ class CardsController < ApplicationController
   # GET /cards/1
   # GET /cards/1.json
   def show
+
     if params[:id] == 'neg'
         @title = "Negative Spreads"
         @cards = Card.joins(:price).where("spread < ?", 0).where(hidden: false).order('Prices.spread')
+
     elsif params[:id] == 'low'
         @title = "Low Spreads"
         @cards = Card.joins(:price).where("spread <= ?", 20).where("spread >= ?", 0).order('Prices.spread')
@@ -26,6 +28,9 @@ class CardsController < ApplicationController
         @title = "Low Spreads in Standard"
         get_standard
         @cards = Card.joins(:price).joins(:card_set).where("spread >= ?", 0).where("spread < ?", 21).where('code IN (?)', @stdArr).order('Prices.spread')
+    end
+    if not params[:foil].nil?
+      @cards = @cards.where(is_foil: params[:foil]).order('Prices.spread')
     end
   end
 
@@ -40,7 +45,9 @@ class CardsController < ApplicationController
     else
         @cards = Card.joins(:price).where('prices.spread IS NOT NULL').where(card_set_id: params[:set]).order('Prices.spread')
     end
-    @cards
+    if not params[:foil].nil?
+      @cards = @cards.where(is_foil: params[:foil]).order('Prices.spread')
+    end
       
       
   end
