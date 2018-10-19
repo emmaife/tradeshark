@@ -4,14 +4,12 @@
 	</div>
 	
 
-	<%= form_tag url_for(:controller => 'cards', :action => 'show'), :method => 'post' do %>
-		
+	<%= form_tag url_for(:controller => 'cards', :action => 'show'), :method => 'get' do %>
 		<%= check_box_tag 'foil[]', '1',params[:foil].nil? || params[:foil].include?('1'), onchange: 'this.form.submit();' %>
 		<%=label_tag 'Foils'%>&nbsp;
 		<%= check_box_tag 'foil[]', '0', params[:foil].nil? || params[:foil].include?('0'), onchange: 'this.form.submit();' %>
 		<%=label_tag 'Non-Foils'%>
-
-
+	
 	<%end%>
 
 
