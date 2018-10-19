@@ -4,7 +4,7 @@ class CardSetsController < ApplicationController
   # GET /card_sets
   # GET /card_sets.json
   def index
-    @card_sets = CardSet.all.order('name')
+    @card_sets = CardSet.all.order('code')
     get_standard
     @bestPosSpread = Card.joins(:price).joins(:card_set).where("spread >= ?", 0).where("spread < ?", 21).where('code IN (?)', @stdArr).order('Prices.spread')[0..4]
     @negativeCards = Card.joins(:price).where("spread < ?", 0).where(hidden: false).order('Prices.spread')[0..4]
