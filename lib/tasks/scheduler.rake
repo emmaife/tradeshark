@@ -209,3 +209,74 @@ task :get_prices => :environment do
     Price.where(ck_updated: nil).update_all(ck_price: nil, spread: nil)
     Price.where("ck_updated < ?", Date.today).update_all(ck_price: nil, spread: nil)
 end
+
+
+desc "Task called by heroku to add new sets and cards"
+
+task :add_new_sets_and_cards
+    require 'net/http'
+    require 'uri'
+    require 'open-uri'
+    require 'date'
+    require 'json'
+    require 'nokogiri'
+    url = "https://mtgjson.com/json/Standard.json"
+    uri = URI(url)
+    response = Net::HTTP.get(uri)
+    data = JSON.parse(response)
+    data.each do |k,v|
+        CardSet.where(code: k).first_or_create do |c|
+            c.name = v["name"]
+            c.tcg_id = v["tcgplayerGroupId"]
+            ckID = nil
+            url =  "https://www.cardkingdom.com/purchasing/mtg_singles?filter[sort]=price_desc"
+            page = Nokogiri::HTML(open(url))
+            page.css('div#editionContainer').css('div.layoutWrapper')[0].children[1].children.each do |x| 
+                if  x.children.text == v["name"]
+                    ckID = x.values[0]
+                    c.ck_id = ckID
+                end
+            end
+        end
+    end
+
+    # Add cards for new sets
+    Card.where(updated_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).length
+    @cardHash = Hash.new
+    CardSet.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).each do |x|
+        url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
+        http = Net::HTTP.new(url.host, url.port)
+        request = Net::HTTP::Get.new(url)
+        request['Authorization'] = "Bearer " + ENV["API_KEY"]
+        response = http.request(request)
+        data = JSON.parse(response.body)
+        unless data['success'] == false
+            totalItems= data['totalItems']
+            i = 0
+            num = (data['totalItems']/100).ceil
+            while i < num+1 do
+                url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=Cards&limit=100&getExtendedFields=true&groupId=" + x['tcg_id'].to_s + '&offset=' + (i *100).to_s )
+                puts url
+                http = Net::HTTP.new(url.host, url.port)
+                request = Net::HTTP::Get.new(url)
+                request['Authorization'] = "Bearer " + ENV["API_KEY"]
+                response = http.request(request)
+                data = JSON.parse(response.body)
+                data['results'].each do |y|
+                    @cardHash[y["productId"]] = {"card_set_id" => x['id'], "name" => y["name"], "set"=> x["code"],  "rarity"=> y['extendedData'][0]['value']}
+                end
+                i+=1
+            end
+        end
+    end
+    @cardHash.delete_if{|k,v|  v['rarity'] == "T" || v['rarity'] == "L" || v['rarity'] == "U" || v['rarity'] == "C" ||  v['rarity'] == "P" ||  v['rarity'] == "S"  }
+
+    @cardHash.each  do |k,v|  
+        Card.create(:tcg_id => k, :name => v['name'], :card_set_id => v['card_set_id'], :is_foil => false)
+        Card.create(:tcg_id => -k, :name => v['name'], :card_set_id => v['card_set_id'], :is_foil => true)
+    end
+
+    #get prices for new cards
+     HardWorker.new.perform
+    
+end
