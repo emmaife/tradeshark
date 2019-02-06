@@ -272,8 +272,8 @@ task :add_new_sets_and_cards
     @cardHash.delete_if{|k,v|  v['rarity'] == "T" || v['rarity'] == "L" || v['rarity'] == "U" || v['rarity'] == "C" ||  v['rarity'] == "P" ||  v['rarity'] == "S"  }
 
     @cardHash.each  do |k,v|  
-        Card.create(:tcg_id => k, :name => v['name'], :card_set_id => v['card_set_id'], :is_foil => false)
-        Card.create(:tcg_id => -k, :name => v['name'], :card_set_id => v['card_set_id'], :is_foil => true)
+        Card.create(:tcg_id => k, :name => v['name'], :card_set_id => v['card_set_id'], :is_foil => false, :hidden => false)
+        Card.create(:tcg_id => -k, :name => v['name'], :card_set_id => v['card_set_id'], :is_foil => true, :hidden => false)
     end
 
     #get prices for new cards
