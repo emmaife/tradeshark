@@ -1,6 +1,6 @@
 
 
-desc "This task is called by the Heroku Schedular add-on to get CK pricing data"
+#desc "This task is called by the Heroku Schedular add-on to get CK pricing data"
 
 #task :get_prices => :environment do
 #    HardWorker.new.perform
