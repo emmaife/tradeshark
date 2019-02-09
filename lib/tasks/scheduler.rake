@@ -214,7 +214,7 @@ end
 
 desc "Task called by heroku to add new sets and cards"
 
-task :add_new_sets_and_cards
+task :add_new_sets_and_cards => :environment do
     require 'net/http'
     require 'uri'
     require 'open-uri'
