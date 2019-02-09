@@ -211,6 +211,8 @@ task :get_prices => :environment do
     #makes sure that a card that is no longer listed on card kingdom has it's price updated to nil
     Price.where(ck_updated: nil).update_all(ck_price: nil, spread: nil)
     Price.where("ck_updated < ?", Date.today).update_all(ck_price: nil, spread: nil)
+    Rake::Task["hide_cards"].invoke
+
 end
 
 
