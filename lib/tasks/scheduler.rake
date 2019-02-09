@@ -103,6 +103,8 @@ end
 desc "This task is called by the Heroku Schedular add-on to get pricing data"
 
 task :get_prices => :environment do
+    require 'open-uri'
+    require 'nokogiri'
     lastCard = Card.where(is_foil: false).last['tcg_id']
     str = ""
     Card.where(is_foil: false).each do |x|
