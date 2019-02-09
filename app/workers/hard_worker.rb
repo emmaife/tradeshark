@@ -12,7 +12,7 @@
             if ERB::Util.url_encode(str).length >=  1500 || x['tcg_id'] == lastCard
                 str = str[0...-1]
                 puts str
-                url = URI("http://api.tcgplayer.com/pricing/product/" +  ERB::Util.url_encode(str))
+                url = URI("http://api.tcgplayer.com/v1.16.0/pricing/product/" +  ERB::Util.url_encode(str))
                 http = Net::HTTP.new(url.host, url.port)
                 request = Net::HTTP::Get.new(url)
                 request['Authorization'] = "Bearer " + ENV["API_KEY"]

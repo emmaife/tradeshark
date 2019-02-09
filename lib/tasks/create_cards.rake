@@ -7,7 +7,7 @@ task :create_cards => :environment do
     require 'json'
 	@cardHash = Hash.new
 	CardSet.all.each do |x|
-	    url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
+	    url = URI("http://api.tcgplayer.com/v1.16.0/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
 	    http = Net::HTTP.new(url.host, url.port)
 	    request = Net::HTTP::Get.new(url)
 	    request['Authorization'] = "Bearer " + ENV["API_KEY"]
@@ -18,7 +18,7 @@ task :create_cards => :environment do
 	        i = 0
 	        num = (data['totalItems']/100).ceil
 	        while i < num+1 do
-	            url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=Cards&limit=100&getExtendedFields=true&groupId=" + x['tcg_id'].to_s + '&offset=' + (i *100).to_s )
+	            url = URI("http://api.tcgplayer.com/v1.16.0/catalog/products?categoryId=1&productTypes=Cards&limit=100&getExtendedFields=true&groupId=" + x['tcg_id'].to_s + '&offset=' + (i *100).to_s )
 	            puts url
 	            http = Net::HTTP.new(url.host, url.port)
 	            request = Net::HTTP::Get.new(url)

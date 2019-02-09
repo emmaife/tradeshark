@@ -14,7 +14,7 @@ task :add_sets => :environment do
     #data.find_all {|x| x['releaseDate'] > lastSetDate}
 
     # get total items for offsetting
-    url = URI("http://api.tcgplayer.com/catalog/categories/1/groups?")
+    url = URI("http://api.tcgplayer.com/v1.16.0/catalog/categories/1/groups?")
     http = Net::HTTP.new(url.host, url.port)
     request = Net::HTTP::Get.new(url)
     request['Authorization'] = "Bearer " + ENV['API_KEY']
@@ -36,7 +36,7 @@ task :add_sets => :environment do
         end
         i = 0
         while i < num+1 do
-            url = URI("http://api.tcgplayer.com/catalog/categories/1/groups?limit=100&offset=" + (i *100).to_s )
+            url = URI("http://api.tcgplayer.com/v1.16.0/catalog/categories/1/groups?limit=100&offset=" + (i *100).to_s )
             http = Net::HTTP.new(url.host, url.port)
             request = Net::HTTP::Get.new(url)
             request['Authorization'] = "Bearer " + ENV['API_KEY']

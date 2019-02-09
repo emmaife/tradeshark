@@ -56,7 +56,7 @@ desc 'get listing price and hide negative cards'
 task :hide_cards => :environment do
     @negCards = Card.joins(:price).where("spread < ?", 0).where(hidden: false).order('Prices.spread')
     @negCards.each do |x|
-        url = URI('http://api.tcgplayer.com/v1.14.0/catalog/products/' + x['tcg_id'].abs.to_s + '/productconditions')
+        url = URI('http://api.tcgplayer.com/v1.16.0/catalog/products/' + x['tcg_id'].abs.to_s + '/productconditions')
         http = Net::HTTP.new(url.host, url.port)
         request = Net::HTTP::Get.new(url)
         request['Authorization'] = "Bearer " + ENV["API_KEY"]
@@ -67,7 +67,7 @@ task :hide_cards => :environment do
 
         #get SKUs in lightly played condition or better
         skus = data['results'].select {|y| y['name'].match?(/Lightly Played|Near Mint/) && y['language'] == 'English' && y['isFoil'] ==  x['is_foil'] }
-        url = "http://api.tcgplayer.com/pricing/sku/" + skus[0]['productConditionId'].to_s + '%2C' + skus[1]['productConditionId'].to_s
+        url = "http://api.tcgplayer.com/v1.16.0/pricing/sku/" + skus[0]['productConditionId'].to_s + '%2C' + skus[1]['productConditionId'].to_s
         url = URI(url)
         http = Net::HTTP.new(url.host, url.port)
         request = Net::HTTP::Get.new(url)
@@ -110,7 +110,7 @@ task :get_prices => :environment do
         if ERB::Util.url_encode(str).length >=  1500 || x['tcg_id'] == lastCard
             str = str[0...-1]
             puts str
-            url = URI("http://api.tcgplayer.com/pricing/product/" +  ERB::Util.url_encode(str))
+            url = URI("http://api.tcgplayer.com/v1.16.0/pricing/product/" +  ERB::Util.url_encode(str))
             http = Net::HTTP.new(url.host, url.port)
             request = Net::HTTP::Get.new(url)
             request['Authorization'] = "Bearer " + ENV["API_KEY"]
@@ -245,7 +245,7 @@ task :add_new_sets_and_cards => :environment do
     Card.where(updated_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).length
     @cardHash = Hash.new
     CardSet.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).each do |x|
-        url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
+        url = URI("http://api.tcgplayer.com/v1.16.0/catalog/products?categoryId=1&getExtendedFields=true&productTypes=Cards&groupId=" + x['tcg_id'].to_s)
         http = Net::HTTP.new(url.host, url.port)
         request = Net::HTTP::Get.new(url)
         request['Authorization'] = "Bearer " + ENV["API_KEY"]
@@ -256,7 +256,7 @@ task :add_new_sets_and_cards => :environment do
             i = 0
             num = (data['totalItems']/100).ceil
             while i < num+1 do
-                url = URI("http://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=Cards&limit=100&getExtendedFields=true&groupId=" + x['tcg_id'].to_s + '&offset=' + (i *100).to_s )
+                url = URI("http://api.tcgplayer.com/v1.16.0/catalog/products?categoryId=1&productTypes=Cards&limit=100&getExtendedFields=true&groupId=" + x['tcg_id'].to_s + '&offset=' + (i *100).to_s )
                 puts url
                 http = Net::HTTP.new(url.host, url.port)
                 request = Net::HTTP::Get.new(url)
@@ -264,7 +264,7 @@ task :add_new_sets_and_cards => :environment do
                 response = http.request(request)
                 data = JSON.parse(response.body)
                 data['results'].each do |y|
-                    @cardHash[y["productId"]] = {"card_set_id" => x['id'], "name" => y["name"], "set"=> x["code"],  "rarity"=> y['extendedData'][0]['value']}
+                    @cardHash[y["productId"]] = {"card_set_id" => x['id'], "name" => y["productName"], "set"=> x["code"],  "rarity"=> y['extendedData'][0]['value']}
                 end
                 i+=1
             end
