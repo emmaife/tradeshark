@@ -1,8 +1,15 @@
 Rails.application.routes.draw do
+  devise_for :users
+  get 'users/new'
+
   resources :prices
   resources :cards
   resources :card_sets
+  resources :watchlists
 
+  post "favorites/:card_id" => "favorites#create", :as => :favorite
+
+  get 'favorites' => 'favorites#index'
   get 'search' => 'cards#search'
   get 'cards/neg' 
   get 'cards/low'

@@ -45,6 +45,7 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
+    bcrypt (3.1.12)
     bindex (0.5.0)
     bootstrap (4.1.3)
       autoprefixer-rails (>= 6.0.3)
@@ -68,6 +69,12 @@ GEM
     declarative-option (0.1.0)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    devise (4.6.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0, < 6.0)
+      responders
+      warden (~> 1.2.3)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
@@ -142,6 +149,7 @@ GEM
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
     ntlm-http (0.1.1)
+    orm_adapter (0.5.0)
     pg (1.1.3)
     platform-api (2.2.0)
       heroics (~> 0.0.25)
@@ -185,6 +193,9 @@ GEM
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
       uber (< 0.2.0)
+    responders (2.4.1)
+      actionpack (>= 4.2.0, < 6.0)
+      railties (>= 4.2.0, < 6.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -241,6 +252,8 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
+    warden (1.2.7)
+      rack (>= 1.0)
     web-console (3.7.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -258,6 +271,7 @@ DEPENDENCIES
   bootstrap
   byebug
   coffee-rails (~> 4.2)
+  devise
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)

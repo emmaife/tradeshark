@@ -1,0 +1,27 @@
+<main role="main" class="container">
+  <div class="starter-template">
+      <h5>Your Watchlist</h5>
+  </div>
+  
+      
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th scope="col">Card</th>
+            <th scope="col">TCG Mid</th>
+            <th scope="col">Card Kingdom</th>
+            <th scope="col">Spread</th>
+            <th></th>
+        </tr>
+        <%@favorites.each do |x|%>
+            <tr id='row_<%=x.card_id%>'>
+                <td><%= x.card.name%></td>
+                <td><%=number_to_currency(x.card.price.tcg_price)%></td>
+                <td><%=number_to_currency(x.card.price.ck_price)%></td>
+                <td><%=number_to_percentage(x.card.price.spread,  precision:2)%></td>
+                <td>
+                    <%= button_tag "Remove From Watchlist", :type => "button", :id => x.card_id, :class=>"favorite btn btn-primary" %>
+                </td>
+            </tr>
+        <%end%>
+    </table>
+</main>

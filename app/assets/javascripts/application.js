@@ -15,3 +15,27 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+$(document).on("click",".favorite",function(){
+   var post_id = $(this).attr('id');
+   var x = $(this);
+   $.ajax({
+    type: "POST",
+    url: '/favorites/' + post_id,
+    success: function() {
+      // change image or something
+    
+      if (window.location.pathname == '/favorites'){
+        $("#row_" + post_id).remove();
+      }
+      else {
+        if (x.html() == 'Add to Watchlist') {
+          x.text('Remove From Watchlist');
+        }
+        else {
+          x.text('Add to Watchlist');
+        }
+      }
+    }
+  })
+});

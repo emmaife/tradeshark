@@ -23,6 +23,7 @@
 			<%if params[:id] == 'neg'%>
 				<th scope="col">Lowest Listing Price</th>
 			<%end%>
+			<th></th>
 		</tr>
 <% 
 		@cards.each do |x| 
@@ -42,6 +43,18 @@
 				<%if params[:id] == 'neg'%>
 					<td><%=number_to_currency(lowestListing)%></td>
 				<%end%>
+				<%if user_signed_in? %>
+					<% if !current_user.favorites.find_by(card_id: x.id).nil?
+						btn_txt = "Remove From Watchlist"
+					else
+						btn_txt = "Add to Watchlist"
+					end
+					%>
+					<td>
+						<%= button_tag btn_txt, :type => "button", :id => x.id, :class=>"favorite btn btn-primary" %>
+					</td>
+					
+				<% end %>
 			</tr>
 <%
 		end
