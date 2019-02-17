@@ -32,6 +32,9 @@
 			<th>TCG Mid</th>
 			<th>Card Kingdom</th>
 			<th>Spread</th>
+			<%if user_signed_in? %>
+				<th></th>
+			<%end%>
 			
 		</tr>
 <% 
@@ -48,6 +51,18 @@
 				<td><%=number_to_currency(tcg_price)%></td>
 				<td><%=number_to_currency(ck_price)%></td>
 				<td><%=number_to_percentage(spread,  precision:2)%></td>
+				<%if user_signed_in? %>
+					<% if !current_user.favorites.find_by(card_id: x.id).nil?
+						btn_txt = "Remove From Watchlist"
+					else
+						btn_txt = "Add to Watchlist"
+					end
+
+					%>
+					<td>
+							<%= button_tag btn_txt, :type => "button", :id => x.id, :class=>"favorite btn btn-primary" %>
+					</td>
+				<%end%>
 			</tr>
 <%
 		end

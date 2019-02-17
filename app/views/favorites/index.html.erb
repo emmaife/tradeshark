@@ -13,8 +13,12 @@
             <th></th>
         </tr>
         <%@favorites.each do |x|%>
+            <%
+            card_set = CardSet.find(x.card.card_set_id)
+            set_code = card_set.code
+            %>
             <tr id='row_<%=x.card_id%>'>
-                <td><%= x.card.name%></td>
+                <td><%=x.card.name %> (<%=set_code%>) <%if x.card.is_foil %><span class="foil">✦</span><%end%> </td>
                 <td><%=number_to_currency(x.card.price.tcg_price)%></td>
                 <td><%=number_to_currency(x.card.price.ck_price)%></td>
                 <td><%=number_to_percentage(x.card.price.spread,  precision:2)%></td>

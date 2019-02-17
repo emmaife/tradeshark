@@ -23,7 +23,9 @@
 			<%if params[:id] == 'neg'%>
 				<th scope="col">Lowest Listing Price</th>
 			<%end%>
-			<th></th>
+			<%if user_signed_in? %>
+				<th></th>
+			<%end%>
 		</tr>
 <% 
 		@cards.each do |x| 
