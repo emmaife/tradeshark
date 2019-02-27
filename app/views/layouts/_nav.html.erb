@@ -9,13 +9,13 @@
 		<ul class="navbar-nav mr-auto">
 		
 		  	<li class="nav-item <%=current_class(cards_neg_path)%>" >
-		    	<a class="nav-link" href="/cards/neg">Negative Spreads </a>
+		    	<a class="nav-link" href="/negative">Negative Spreads </a>
 		  	</li>
 		  	<li class="nav-item <%=current_class(cards_low_path)%>">
-		    	<a class="nav-link" href="/cards/low">Lowest Spreads</a>
+		    	<a class="nav-link" href="/low">Lowest Spreads</a>
 		  	</li>
 		  	<li class="nav-item <%=current_class(cards_low_standard_path)%>">
-		    	<a class="nav-link" href="/cards/low_standard">Lowest Standard Spreads</a>
+		    	<a class="nav-link" href="/standard">Lowest Standard Spreads</a>
 		  	</li>
 		  	<% if user_signed_in? %>
 		  		<li class="nav-item <%=current_class(edit_user_registration_path)%>">

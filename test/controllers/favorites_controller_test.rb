@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class FavoritesControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+   test "should not add to faves without user id" do
+     fave = Favorite.new
+     assert_not fave.save
+   end
 end

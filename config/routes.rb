@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   get 'cards/neg' 
   get 'cards/low'
   get 'cards/low_standard'
+  get 'negative' => 'cards#negative'
+  get 'low' => 'cards#low'
+  get 'standard' => 'cards#standard'
   root to: 'card_sets#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

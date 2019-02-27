@@ -8,35 +8,39 @@ class CardsController < ApplicationController
   # GET /cards
   # GET /cards.json
   def index
-    
     @cards = Card.all
-   
   end
 
   # GET /cards/1
   # GET /cards/1.json
   def show
 
-    if params[:id] == 'neg'
-        @title = "Negative Spreads"
-        @cards = Card.joins(:price).where("spread < ?", 0).where(hidden: false).order('Prices.spread')
+  end
 
-    elsif params[:id] == 'low'
-        @title = "Low Spreads"
-        @cards = Card.joins(:price).where("spread <= ?", 20).where("spread >= ?", 0).order('Prices.spread')
-    elsif params[:id] == 'low_standard'
-        @title = "Low Spreads in Standard"
-        get_standard
-        @cards = Card.joins(:price).joins(:card_set).where("spread >= ?", 0).where("spread < ?", 21).where('code IN (?)', @stdArr).order('Prices.spread')
-    end
+
+  def negative
+    @title = "Negative Spreads"
+    @cards = Card.joins(:price).where("spread < ?", 0).where(hidden: false).order('Prices.spread')
     if not params[:foil].nil?
       @cards = @cards.where(is_foil: params[:foil]).order('Prices.spread')
     end
   end
 
+  def low
+    @title = "Low Spreads"
+    @cards = Card.joins(:price).where("spread <= ?", 20).where("spread >= ?", 0).order('Prices.spread')
+    if not params[:foil].nil?
+      @cards = @cards.where(is_foil: params[:foil]).order('Prices.spread')
+    end
+  end
 
-  def negative
-    @negativeCards = Card.joins(:price).where("price < ?", 0).order('Prices.spread')
+  def standard
+     @title = "Low Spreads in Standard"
+     get_standard
+     @cards = Card.joins(:price).joins(:card_set).where("spread >= ?", 0).where("spread < ?", 21).where('code IN (?)', @standrd_arr).order('Prices.spread')
+     if not params[:foil].nil?
+      @cards = @cards.where(is_foil: params[:foil]).order('Prices.spread')
+    end
   end
 
   def search
@@ -47,9 +51,7 @@ class CardsController < ApplicationController
     end
     if not params[:foil].nil?
       @cards = @cards.where(is_foil: params[:foil]).order('Prices.spread')
-    end
-      
-      
+    end   
   end
 
   # GET /cards/new

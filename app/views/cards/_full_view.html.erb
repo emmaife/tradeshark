@@ -1,0 +1,66 @@
+<main role="main" class="container">
+	<div class="starter-template">
+		<h1><%=@title%></h1>
+	</div>
+	
+
+	<%= form_tag url_for(:controller => 'cards', :action => 'negative'), :method => 'get' do %>
+		<%= check_box_tag 'foil[]', '1',params[:foil].nil? || params[:foil].include?('1'), onchange: 'this.form.submit();' %>
+		<%=label_tag 'Foils'%>&nbsp;
+		<%= check_box_tag 'foil[]', '0', params[:foil].nil? || params[:foil].include?('0'), onchange: 'this.form.submit();' %>
+		<%=label_tag 'Non-Foils'%>
+	
+	<%end%>
+
+
+
+	<table class="table table-striped table-bordered">
+		<tr>
+			<th scope="col">Card</th>
+			<th scope="col">TCG Mid</th>
+			<th scope="col">Card Kingdom</th>
+			<th scope="col">Spread</th>
+			<%if params[:id] == 'neg'%>
+				<th scope="col">Lowest Listing Price</th>
+			<%end%>
+			<%if user_signed_in? %>
+				<th></th>
+			<%end%>
+		</tr>
+<% 
+		@cards.each do |x| 
+			prices = Price.where(card_id: x.id)[0]
+			tcg_price = prices['tcg_price']
+			ck_price = prices['ck_price']
+			spread = prices['spread']
+			lowestListing = prices['lowest_listing_price']
+			setCode = CardSet.where(id: x.card_set_id)[0]['code']
+			
+%>
+			<tr>
+				<td><%=x['name']  %> (<%=setCode%>) <%if x['is_foil'] %><span class="foil">✦</span><%end%><%= %> </td>
+				<td><%=number_to_currency(tcg_price)%></td>
+				<td><%=number_to_currency(ck_price)%></td>
+				<td><%=number_to_percentage(spread,  precision:2)%></td>
+				<%if params[:id] == 'neg'%>
+					<td><%=number_to_currency(lowestListing)%></td>
+				<%end%>
+				<%if user_signed_in? %>
+					<% if !current_user.favorites.find_by(card_id: x.id).nil?
+						btn_txt = "Remove From Watchlist"
+					else
+						btn_txt = "Add to Watchlist"
+					end
+					%>
+					<td>
+						<%= button_tag btn_txt, :type => "button", :id => x.id, :class=>"favorite btn btn-primary" %>
+					</td>
+					
+				<% end %>
+			</tr>
+<%
+		end
+
+%>
+	</table>
+</main>
