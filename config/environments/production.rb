@@ -25,8 +25,7 @@ Rails.application.configure do
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
-  config.action_mailer.default_url_options = { :host => 'tradeshark.herokuapp.com' }
-
+config.action_mailer.default_url_options = { :host => 'smtp.sendgrid.net'} 
 
   config.action_mailer.raise_delivery_errors = true
 
@@ -37,7 +36,7 @@ Rails.application.configure do
     :port                 => 587,
     :enable_starttls_auto => true,
     :authentication       => :plain,
-    :domain               => "yourdomain.com"
+    :domain               => "heroku.com"
   }
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
