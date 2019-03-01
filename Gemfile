@@ -26,6 +26,9 @@ gem 'devise'
 gem "figaro"
 gem 'sendgrid-ruby'
 
+#for tracking price changes
+gem 'paper_trail'
+
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

@@ -93,6 +93,7 @@ task :hide_cards => :environment do
             
         end
         if not priceArr.empty? 
+            #price.paper_trail_event = nil
             price.update(lowest_listing_price: priceArr.min )
         end
 
@@ -123,11 +124,13 @@ task :get_prices => :environment do
                 if y["subTypeName"] == "Normal"
                     c = Card.find_by(tcg_id: y['productId'])
                     price = Price.where(card_id: c.id).first_or_initialize
+                    price.paper_trail_event = 'update tcg price'
                     price.tcg_price =  y["midPrice"]
                     price.save
                 elsif y["subTypeName"] == "Foil"
                     c = Card.find_by(tcg_id: -(y['productId']))
                     price = Price.where(card_id: c.id).first_or_initialize
+                    price.paper_trail_event = 'update tcg price'
                     price.tcg_price =  y["midPrice"]
                     price.save
                 end
@@ -168,10 +171,20 @@ task :get_prices => :environment do
 
                     unless f.nil?
                         mpCardPrice = Price.find_by(card_id: f['id'])
+
+                        mpCardPrice.paper_trail_event = nil
                         mpCardPrice.update_attribute(:ck_updated, Time.now) 
+
+                        #set paper trail event
+                        mpCardPrice.paper_trail_event = 'update ck price'
+
                         mpCardPrice.update_attribute(:ck_price, price ) 
                         unless mpCardPrice["tcg_price"].nil?
                             spread =  ((1 - (price/mpCardPrice["tcg_price"]))*100)
+
+                            #set paper trail event
+                            mpCardPrice.paper_trail_event = 'update spread'
+
                             mpCardPrice.update_attribute(:spread, spread  ) 
                         end
                     end
@@ -181,10 +194,21 @@ task :get_prices => :environment do
 
                         unless m.nil?
                             cardPrice = Price.find_by(card_id: m['id'])
+
+                            cardPrice.paper_trail_event = nil
                             cardPrice.update_attribute(:ck_updated, Time.now)
+
+                            #set paper trail event
+                            cardPrice.paper_trail_event = 'update ck price'
+
                             cardPrice.update_attribute(:ck_price, price )
+
                             unless cardPrice["tcg_price"].nil?
                                 spread =  ((1 - (price/cardPrice["tcg_price"]))*100)
+
+                                #set paper trail event
+                                cardPrice.paper_trail_event = 'update spread'
+
                                 cardPrice.update_attribute(:spread, spread  ) 
                              end
                         end
@@ -194,10 +218,20 @@ task :get_prices => :environment do
 
                         unless f.nil?
                             foilCardPrice = Price.find_by(card_id: f['id'])
+
+                            foilCardPrice.paper_trail_event = nil
                             foilCardPrice.update_attribute(:ck_updated, Time.now) 
+
+                            #set paper trail event
+                            foilCardPrice.paper_trail_event = 'update ck price'
+
                             foilCardPrice.update_attribute(:ck_price, price ) 
                             unless foilCardPrice["tcg_price"].nil?
                                 spread =  ((1 - (price/foilCardPrice["tcg_price"]))*100)
+
+                                #set paper trail event
+                                foilCardPrice.paper_trail_event = 'update spread'
+
                                 foilCardPrice.update_attribute(:spread, spread  ) 
                             end
                         end
@@ -209,6 +243,7 @@ task :get_prices => :environment do
     end
     
     #makes sure that a card that is no longer listed on card kingdom has it's price updated to nil
+
     Price.where(ck_updated: nil).update_all(ck_price: nil, spread: nil)
     Price.where("ck_updated < ?", Date.today).update_all(ck_price: nil, spread: nil)
     Rake::Task["hide_cards"].invoke
