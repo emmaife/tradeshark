@@ -24,6 +24,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 
 gem "figaro"
+gem 'sendgrid-ruby'
 
 
 # Use jquery as the JavaScript library
